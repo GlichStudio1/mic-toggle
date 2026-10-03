@@ -1,0 +1,118 @@
+#:import dp kivy.metrics.dp
+#:import sp kivy.metrics.sp
+
+<SizeButton@Button>:
+    selected: False
+    size_hint_y: None
+    height: dp(56)
+    font_size: sp(18)
+    bold: True
+    background_normal: ''
+    background_down: ''
+    background_color: (0.18, 0.62, 0.35, 1) if self.selected else (0.25, 0.25, 0.30, 1)
+
+<SettingsDialog>:
+    size_hint: 0.88, None
+    height: dp(352)
+    auto_dismiss: True
+    background: ''
+    background_color: 0.12, 0.12, 0.15, 1
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(12)
+        Label:
+            text: 'Buton boyutu'
+            font_size: sp(20)
+            bold: True
+            size_hint_y: None
+            height: dp(40)
+        SizeButton:
+            text: 'KÜÇÜK'
+            selected: app.size_name == 'KÜÇÜK'
+            on_release: app.set_size('KÜÇÜK')
+        SizeButton:
+            text: 'ORTA'
+            selected: app.size_name == 'ORTA'
+            on_release: app.set_size('ORTA')
+        SizeButton:
+            text: 'BÜYÜK'
+            selected: app.size_name == 'BÜYÜK'
+            on_release: app.set_size('BÜYÜK')
+        Button:
+            text: 'KAPAT'
+            font_size: sp(16)
+            size_hint_y: None
+            height: dp(48)
+            background_normal: ''
+            background_color: 0.3, 0.3, 0.35, 1
+            on_release: root.dismiss()
+
+<MainScreen>:
+    orientation: 'vertical'
+    padding: dp(16)
+    spacing: dp(14)
+    canvas.before:
+        Color:
+            rgba: 0.07, 0.07, 0.09, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        size_hint_y: None
+        height: dp(56)
+        Label:
+            text: 'Mic Toggle'
+            font_size: sp(22)
+            bold: True
+            halign: 'left'
+            valign: 'middle'
+            text_size: self.size
+        Button:
+            text: app.gear_text
+            font_name: app.gear_font
+            font_size: sp(26) if app.gear_text != 'AYAR' else sp(12)
+            size_hint: None, None
+            size: dp(56), dp(48)
+            pos_hint: {'center_y': 0.5}
+            background_normal: ''
+            background_color: 0.22, 0.22, 0.27, 1
+            on_release: app.open_settings()
+
+    Label:
+        text: app.status_text
+        font_size: sp(16)
+        halign: 'center'
+        valign: 'middle'
+        text_size: self.width, None
+        size_hint_y: None
+        height: max(dp(64), self.texture_size[1])
+
+    ProgressBar:
+        max: 1
+        value: app.level
+        size_hint_y: None
+        height: dp(10)
+        opacity: 1 if app.mic_open else 0.25
+
+    Button:
+        text: 'OVERLAY DURDUR' if app.service_running else 'OVERLAY BAŞLAT'
+        font_size: sp(18)
+        bold: True
+        size_hint_y: None
+        height: dp(64)
+        background_normal: ''
+        background_color: (0.77, 0.16, 0.16, 1) if app.service_running else (0.18, 0.62, 0.35, 1)
+        on_release: app.toggle_service()
+
+    Label:
+        text: 'Mikrofon yalnızca yüzen butonu AÇIK yaptığınızda ve sadece bu uygulama için açılır. Ses kaydedilmez, saklanmaz veya gönderilmez; yalnızca ses seviyesi ölçülür. Bu uygulama telefonun sistem genelindeki mikrofon anahtarını ya da diğer uygulamaların mikrofonunu kontrol edemez.'
+        font_size: sp(13)
+        color: 0.7, 0.7, 0.75, 1
+        halign: 'center'
+        text_size: self.width, None
+        size_hint_y: None
+        height: self.texture_size[1]
+
+    Widget:
